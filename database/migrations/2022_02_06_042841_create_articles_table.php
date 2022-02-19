@@ -16,13 +16,13 @@ class CreateArticlesTable extends Migration
     public function up()
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->string('id', 255)->unique();
+            $table->string('id', 191)->unique();
             $table->integer('type');
             $table->string('title', 100)->nullable();
             $table->text('content')->nullable();
             $table->string('slug', 100)->nullable()->unique();
-            $table->string('main_img_url', 2000)->nullable();
-            $table->string('category_id', 255)->nullable();
+            $table->string('main_img_url', 191)->nullable();
+            $table->string('category_id', 191)->nullable();
             $table->timestamps();
         });
     }
