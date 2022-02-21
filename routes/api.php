@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,11 @@ Route::group(['prefix' => 'article'], function() {
     Route::get('/{id}', [ArticleController::class, 'show'])->name('article.show');
     Route::post('store', [ArticleController::class, 'store'])->name('article.store');
     Route::put('update', [ArticleController::class, 'update'])->name('article.update');
+});
+
+Route::group(['prefix' => 'image'], function() {
+    Route::get('', [ImageController::class, 'index'])->name('image.index');
+    Route::post('', [ImageController::class, 'store'])->name('image.store');
 });
 
 Route::group(['prefix' => 'public'], function() {
