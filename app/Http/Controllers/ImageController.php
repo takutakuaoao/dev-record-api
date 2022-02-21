@@ -18,7 +18,7 @@ class ImageController extends Controller
             ->toArray();
 
         $imagesFormatted = array_map(function ($image) {
-            $image->url = config('app.url') . '/' . 'upload' . '/' . $image->name;
+            $image->url = config('app.url') . '/' . 'storage/upload' . '/' . $image->name;
 
             return $image;
         }, $images);
@@ -33,7 +33,8 @@ class ImageController extends Controller
         $fileName = $file->getClientOriginalName();
 
         if (DB::table('images')->where('name', $fileName)->exists()) {
-            $fileName = $fileName . '_' . uniqid();
+            $extension = $file->getClientOriginalExtension();
+            $fileName  = pathinfo($fileName)['filename'] . '_' . uniqid() . '.' . $extension;
         }
 
         DB::table('images')->insert([
@@ -51,6 +52,8 @@ class ImageController extends Controller
             ['disk' => 'upload'],
         );
 
-        return (new SuccessResponse(['fileName' => $fileName]))->toArray();
+        $filePath = config('app.url') . '/' . 'storage/upload' . '/' . $fileName;
+
+        return (new SuccessResponse(['fileName' => $fileName, 'url' => $filePath]))->toArray();
     }
 }

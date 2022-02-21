@@ -17,6 +17,7 @@ class ImageStoreActionTest extends TestCase
         $response = $this->post(route('image.store'), ['image' => $file]);
 
         $this->assertTrue($response['result']);
+        $this->assertSame(config('app.url') . '/' . 'storage/upload' . '/' . $name, $response['data']['url']);
         $this->assertDatabaseHas('images', ['name' => $name, 'width' => 30, 'height' => 50]);
         $this->assertTrue(Storage::disk('upload')->exists($name));
     }
@@ -30,5 +31,6 @@ class ImageStoreActionTest extends TestCase
         $response2 = $this->post(route('image.store'), ['image' => $file]);
 
         $this->assertTrue(Storage::disk('upload')->exists($response2['data']['fileName']));
+        $this->assertSame(1, preg_match('/\.png$/', $response2['data']['fileName']));
     }
 }
