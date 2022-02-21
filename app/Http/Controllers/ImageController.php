@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Response\SuccessResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -38,7 +40,7 @@ class ImageController extends Controller
         }
 
         DB::table('images')->insert([
-            'id'         => uniqid(),
+            'id'         => $id = uniqid(),
             'name'       => $fileName,
             'width'      => $fileSize[0],
             'height'     => $fileSize[1],
@@ -46,11 +48,20 @@ class ImageController extends Controller
             'updated_at' => null,
         ]);
 
+        $debug = DB::table('images')->where('id', $id)->first();
+        Log::info($debug->id . ': id');
+        Log::info($debug->name . ': name');
+        Log::info($debug->width . ': width');
+        Log::info($debug->height . ': height');
+
+
         $file->storeAs(
             '',
             $fileName,
             ['disk' => 'upload'],
         );
+
+        Log::info(Storage::disk('upload')->exists($fileName) . ': file exists');
 
         $filePath = config('app.url') . '/' . 'storage/upload' . '/' . $fileName;
 
