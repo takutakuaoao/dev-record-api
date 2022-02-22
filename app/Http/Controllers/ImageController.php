@@ -48,20 +48,8 @@ class ImageController extends Controller
             'updated_at' => null,
         ]);
 
-        $debug = DB::table('images')->where('id', $id)->first();
-        Log::info($debug->id . ': id');
-        Log::info($debug->name . ': name');
-        Log::info($debug->width . ': width');
-        Log::info($debug->height . ': height');
-
-
-        $file->storeAs(
-            '',
-            $fileName,
-            ['disk' => 'upload'],
-        );
-
-        Log::info(Storage::disk('upload')->exists($fileName) . ': file exists');
+        DB::table('images')->where('id', $id)->first();
+        Storage::disk(config('filesystems.default'))->put($fileName, $file->getContent(), 'public');
 
         $filePath = config('app.url') . '/' . 'storage/upload' . '/' . $fileName;
 
